@@ -17,12 +17,12 @@ fun distanceFromSeattle(query: City): Double{
 }
 
 /* function to compute distance between to cities */
-fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {    
-    val R = 6372.8 // in kilometers    
-    val l1 = Math.toRadians(lat1)    
-    val l2 = Math.toRadians(lat2)    
-    val dl = Math.toRadians(lat2 - lat1)    
-    val dr = Math.toRadians(lon2 - lon1)    
+fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    val R = 6372.8 // in kilometers
+    val l1 = Math.toRadians(lat1)
+    val l2 = Math.toRadians(lat2)
+    val dl = Math.toRadians(lat2 - lat1)
+    val dr = Math.toRadians(lon2 - lon1)
     return 2 * R * Math.asin(Math.sqrt(Math.pow(Math.sin(dl / 2), 2.0) + Math.pow(Math.sin(dr / 2), 2.0) * Math.cos(l1) * Math.cos(l2)))
 }
 
@@ -31,33 +31,44 @@ fun main() {
     var cityLocations = listCities()
     cityLocations.forEach {				// printing cities
        i -> println(i)
-    }																				
-    
+    }
+
     println("********** Step 3 **********")
     println("The distance between Seattle and Tacoma is ${distanceFromSeattle(cityLocations[4])} km")		// printing distance from Seattle to Tacoma
-    
+
     println("********** Step 4 **********")
     val dists = cityLocations.map { x -> distanceFromSeattle(x) }											// using map to compute the distance to Seattle for each city
     println("A new List with the distances of all cities in list to Seattle: $dists")						// printing distances
-    
+
     println("********** Step 5 **********")
     var far = cityLocations.filter { x -> distanceFromSeattle(x) > 1000 }									// filtering for cities far away
     println("List of cities over 1000 km from Seattle:")													// printing distant cities
     far.forEach {
         i -> println(i.component1())
     }
-    
+
     println("********** Step 6 **********")
     var west = cityLocations.filter { x -> x.component3() < -89.967803 }
     west = west.map { it }
     west.forEach {
         i -> println(i.component1())
     }
-    
+
     println("********** Step 7 **********")
     var max = cityLocations.maxBy { it -> distanceFromSeattle(it) }
     println("Max Distance: $max")
-    
+
     println("********** Step 8 **********")
- 
+    var map = mutableMapOf<String, City>()
+    cityLocations.forEach {
+        city -> map.set(city.component1(), city)
+    }
+    map.forEach {
+        k, v -> println("Name $k: City $v")
+    }
+    if (map.containsKey("Bozeman")) {
+        var lat = map.getValue("Bozeman").component2()
+        println("The latitude for Bozeman is $lat")
+    }
+
 }
